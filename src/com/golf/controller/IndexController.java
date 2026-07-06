@@ -143,6 +143,8 @@ public class IndexController
 			session_Configurations.setBroadcaster(selectedBroadcaster);
 			session_Configurations.setVizscene(vizScene);
 			session_Configurations.setIpAddress(vizIPAddresss);
+			
+			session_selected_broadcaster = selectedBroadcaster;
 
 			if(!vizIPAddresss.isEmpty()) {
 				session_Configurations.setPortNumber(Integer.valueOf(vizPortNumber));
@@ -160,7 +162,6 @@ public class IndexController
 					break;
 				}
 			}
-			session_selected_broadcaster = selectedBroadcaster;
 			
 			JAXBContext.newInstance(Configurations.class).createMarshaller().marshal(session_Configurations, 
 					new File(GolfUtil.GOLF_DIRECTORY + GolfUtil.CONFIGURATIONS_DIRECTORY + GolfUtil.OUTPUT_XML));
@@ -171,7 +172,7 @@ public class IndexController
 		}
 	}
 	
-	@RequestMapping(value = {"/processGolfProcedures"}, method={RequestMethod.GET,RequestMethod.POST})    
+	@RequestMapping(value = {"/processGolfProcedures.html"}, method={RequestMethod.GET,RequestMethod.POST})    
 	public @ResponseBody String processGolfProcedures(
 			@RequestParam(value = "whatToProcess", required = false, defaultValue = "") String whatToProcess,
 			@RequestParam(value = "valueToProcess", required = false, defaultValue = "") String valueToProcess)throws Exception
