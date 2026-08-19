@@ -873,7 +873,7 @@ public class PGTI extends Scene {
 //			 		+ "*GEOM*TEXT SET " + session_tour.getData().get(0).getCourseName().toUpperCase() + ", " + session_tour.getData().get(0).getCourseVenue().toUpperCase()  + "\0");
 //			
 			print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
-			 		+ "*GEOM*TEXT SET " + "CLASSIC GOLF & COUNTRY CLUB, NUH, HARYANA"  + "\0");
+			 		+ "*GEOM*TEXT SET " + "ZION HILLS GOLF COUNTY, KOLAR, KARNATAKA"  + "\0");
 		}
 		print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Fullframes"
 			    + " C:/Temp/Preview.png Anim_Fullframe$In_Out 1.960 Anim_Fullframe$In_Out$In 1.960 Anim_Fullframe$In_Out$In$In 1.540 \0");
@@ -1099,16 +1099,14 @@ public class PGTI extends Scene {
 			if(val.split(",")[0].equalsIgnoreCase("EMPTY")) {
 				
 			}else {
-				String part = val.split(",")[0];   
-				String[] words = part.split(" ");
+				String part = val.split(",")[0].trim();
 
-				String result = words[0].toLowerCase() + " " + words[1].toUpperCase();
+				String result = part;
 
-	//			System.out.println("val is " + result);
 				print_writer.println(
-						 "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
-						 "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info02*GEOM*TEXT SET " +
-						 result +  "\0");
+				    "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
+				    "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info02*GEOM*TEXT SET " +
+				    result.toUpperCase() + "\0");
 			}
 			
 				
@@ -1344,7 +1342,7 @@ public class PGTI extends Scene {
 //		    
 		    
 		    print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
-			 		+ "*GEOM*TEXT SET " + "CLASSIC GOLF & COUNTRY CLUB, NUH, HARYANA"  + "\0");
+			 		+ "*GEOM*TEXT SET " + "ZION HILLS GOLF COUNTY, KOLAR, KARNATAKA"  + "\0");
 		    print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Fullframes"
 				    + " C:/Temp/Preview.png Anim_Fullframe$In_Out 1.960 Anim_Fullframe$In_Out$In 1.960 Anim_Fullframe$In_Out$In$In 1.540 \0");
 		
