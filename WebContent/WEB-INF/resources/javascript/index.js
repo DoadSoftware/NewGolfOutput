@@ -96,7 +96,13 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 				break; 
 			case 'h':
 				processGolfProcedures('POPULATE-HOLE_DETAILS');
-				break; 			
+				break; 
+			case 'q':
+				processGolfProcedures('POPULATE-TLOGO');
+				break; 	
+			case 'w':
+				processGolfProcedures('POPULATE-CHANGETLOGO');
+				break;				
 			case 'Alt_2':
 			    processGolfProcedures('POPULATE-COF-PLAYER_DETAILS');
 			    break;	
@@ -117,7 +123,13 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 				break;	 
 			case 'c':
 				processGolfProcedures('ANIMATE_IN-BIRDIE');
+				break;
+			case 'r':
+				processGolfProcedures('POPULATE-EYE_OFF');
 				break;	
+			case 'e':
+				processGolfProcedures('POPULATE-EYE_ONN');
+				break;								
 				
 			case 'Alt_5':
 				processGolfProcedures('POPULATE_TEST-LOF-PLAYER_DETAILS');
@@ -296,7 +308,7 @@ function processGolfProcedures(whatToProcess, whichInput)
 	
 	switch(whatToProcess) {
 	case 'POPULATE-NAMESUPERR':
-	    value_to_process = $('#selectPlayer').val();
+	    value_to_process = $('#selectPlayer').val() +  ',' + $('#selecttype').val();
 		break;
 		
 	case 'POPULATE-FF-MATCHDRAWS':
@@ -542,31 +554,22 @@ function addItemsToList(whatToProcess, dataToProcess)
 		
 		
 		case 'POPULATE-LOF-LOFEXTRA':
-			
 			$("#match_body_div").hide();
 			$("#select_graphic_options_div").show();
 			
 			var div = document.getElementById('select_graphic_options_div');
 			div.innerHTML = "";
 			
-			
-			/* ---------- HEADER ---------- */
-			
 			var h = document.createElement("h3");
 			h.innerHTML = "LOF EXTRA";
 			h.style.textAlign = "center";
 			div.appendChild(h);
-			
-			
-			/* ---------- HIDDEN VALUE ---------- */
 			
 			var hiddenType = document.createElement("input");
 			hiddenType.type = "hidden";
 			hiddenType.id = "selectedExtraType";
 			div.appendChild(hiddenType);
 			
-			
-			/* ---------- TABLE ---------- */
 			
 			var table = document.createElement("table");
 			table.className = "table table-bordered";
@@ -575,10 +578,6 @@ function addItemsToList(whatToProcess, dataToProcess)
 			table.appendChild(tbody);
 			
 			div.appendChild(table);
-			
-			
-			/* ================= TYPE BUTTONS ================= */
-			
 			var selectedExtraType = "";
 			
 			var row = tbody.insertRow();
@@ -588,33 +587,17 @@ function addItemsToList(whatToProcess, dataToProcess)
 			var typeDiv = document.createElement("div");
 			
 			
-			var types = [
-			    "Empty",
-			    "Albatross",
-			    "Birdie Putt",
-			    "Par Putt",
-			    "Bogey Putt",
-			    "Hole In One",
-			    "Eagle putt"
+			var types = ["Empty","Albatross","Birdie Putt",
+			    "Par Putt","Bogey Putt","Hole In One","Eagle putt"];
+			
+			var shotNames = ["1st SHOT","2nd SHOT","3rd SHOT",
+              "4th SHOT","5th SHOT","6th SHOT","7th SHOT"
 			];
 			
-		var shotNames = [
- 			   "1st SHOT",
- 			  "2nd SHOT",
-              "3rd SHOT",
-              "4th SHOT",
-              "5th SHOT",
-              "6th SHOT",
-              "7th SHOT"
-];
-
-
-for (var s = 0; s < shotNames.length; s++) {
-    types.push(shotNames[s]);
-}
 			
-			
-			/* create buttons */
+			for (var s = 0; s < shotNames.length; s++) {
+			    types.push(shotNames[s]);
+			}
 			
 			for (var i = 0; i < types.length; i++) {
 			
@@ -644,9 +627,6 @@ for (var s = 0; s < shotNames.length; s++) {
 			}
 			
 			row.insertCell(1).appendChild(typeDiv);
-			
-			
-			/* ================= BUTTONS ================= */
 			
 			row = tbody.insertRow();
 			
@@ -1445,6 +1425,23 @@ break;
 		cell = row.insertCell(1);
 		cell.appendChild(select);
 		
+		select = document.createElement('select');
+		select.style = 'width:300px';
+		select.id = 'selecttype';
+		
+		option = document.createElement('option');
+	    option.value = 'Winner';
+	    option.text = 'Winner';
+	    select.appendChild(option);
+		
+		option = document.createElement('option');
+	    option.value = 'TName';
+	    option.text = 'TName';
+	    select.appendChild(option);
+					
+		cell = row.insertCell(2);
+		cell.appendChild(select);
+			
 		row = tbody.insertRow();
 		
 		option = document.createElement('input');

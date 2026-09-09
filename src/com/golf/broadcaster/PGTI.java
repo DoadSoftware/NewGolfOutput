@@ -17,6 +17,9 @@ import com.golf.model.GolfScoresResponse;
 import com.golf.model.GolfScoresResponse.PlayerScore;
 import com.golf.model.GolfTourResponse;
 import com.golf.service.GolfService;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class PGTI extends Scene {
 
@@ -32,6 +35,7 @@ public class PGTI extends Scene {
 	private String local_photo_path = "\\\\c\\\\Images\\\\Golf\\\\Photos\\\\";
 	boolean lofextradata = false;
 	public String logo_path = "IMAGE*/Golf/GolfLogo";
+	public String logo_pathchange = "IMAGE*/Golf/PGTI";
 	public String status;
 	
 	public PGTI() {
@@ -63,14 +67,28 @@ public class PGTI extends Scene {
 		case "POPULATE-HOLE_DETAILS_LT": case "POPULATE-LOFF-PLAYER_DETAILSLT":  case "POPULATE-LOFF-PLAYER_DETAILSLT_EXTRA":
 		case "POPULATE-LT-MATCHID": case "POPULATE-LOF-PLAYER_DETAILS": case "POPULATE-HOLE_DETAILS": case "POPULATE-COF-PLAYER_DETAILSLT":
 		 case "POPULATE-LT-PLAYER_DETAILS_COF":
+		 case "POPULATE-TLOGO":   case "POPULATE-CHANGETLOGO": case "POPULATE-EYE_OFF": case "POPULATE-EYE_ONN":
 		switch (whatToProcess.toUpperCase()) {
+			case "POPULATE-EYE_OFF":
+				print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$BG*ACTIVE SET " + "0" + "\0");
+				break;
+			case "POPULATE-EYE_ONN":
+				print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$BG*ACTIVE SET " + "1" + "\0");
+				break;
+			case "POPULATE-TLOGO":
+				print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Header$Logo_Grp"
+						+ "$img_Logo*TEXTURE*IMAGE SET " + logo_path + "\0");
+				break;
+			 case "POPULATE-CHANGETLOGO": 
+				 print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Header$Logo_Grp"
+							+ "$img_Logo*TEXTURE*IMAGE SET " + logo_pathchange + "\0");
+				break;	
 			case "POPULATE-NAMESUPERR":
-				populatenamesuper(print_writer, session_score, session_tour, session_entry_list, session_course, session_draws, valueToProcess.split(",")[0], session_selected_broadcaster);
-			break;
+				populatenamesuper(print_writer, session_score, session_tour, session_entry_list, session_course, session_draws, valueToProcess.split(",")[0],valueToProcess.split(",")[1], session_selected_broadcaster);
+				break;
 			case "POPULATE-FF-MATCHDRAWS":
 				populatedrawsdata(print_writer, session_score, session_tour, session_entry_list, session_course, session_draws, valueToProcess.split(",")[0], session_selected_broadcaster,config);
 				break;
-				
 			case "POPULATE-NAMESUPERR_FREETEXT":
 				populatenamesuperfreetext(print_writer, session_score, session_tour, session_entry_list, session_course, session_draws, valueToProcess, session_selected_broadcaster);
 				break;
@@ -397,6 +415,20 @@ public class PGTI extends Scene {
 
 	public void AnimateOutGraphics(PrintWriter print_writer, String whichGraphic) throws InterruptedException {
 		
+	}
+	private String readVenueName() {
+	    try {
+	        Path path = Paths.get("C:\\Sports\\Golf\\venue_name.txt");
+
+	        if (Files.exists(path)) {
+	            return Files.readString(path).trim();
+	        }
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    return "";
 	}
 	
 	public void populateMatchId(PrintWriter print_writer, GolfScoresResponse session_score, GolfTourResponse session_tour, 
@@ -745,7 +777,7 @@ public class PGTI extends Scene {
 	}
 	
 	
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	public void populateFFTopthree(PrintWriter print_writer, GolfScoresResponse session_score, GolfTourResponse session_tour, 
 			GolfEntryListResponse session_entry_list, GolfCourseResponse session_course, GolfDrawsResponse session_draws, String viz_sence_path,String selectedbroadcaster,int whichSide,Configurations config) {
 		if (session_score == null) {
@@ -872,8 +904,11 @@ public class PGTI extends Scene {
 //			print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
 //			 		+ "*GEOM*TEXT SET " + session_tour.getData().get(0).getCourseName().toUpperCase() + ", " + session_tour.getData().get(0).getCourseVenue().toUpperCase()  + "\0");
 //			
+			String venueName = readVenueName();
+//			print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
+//			 		+ "*GEOM*TEXT SET " + "ZION HILLS GOLF COUNTY, KOLAR, KARNATAKA"  + "\0");
 			print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
-			 		+ "*GEOM*TEXT SET " + "ZION HILLS GOLF COUNTY, KOLAR, KARNATAKA"  + "\0");
+			 		+ "*GEOM*TEXT SET " + venueName  + "\0");
 		}
 		print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Fullframes"
 			    + " C:/Temp/Preview.png Anim_Fullframe$In_Out 1.960 Anim_Fullframe$In_Out$In 1.960 Anim_Fullframe$In_Out$In$In 1.540 \0");
@@ -1340,16 +1375,18 @@ public class PGTI extends Scene {
 //		    print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
 //			 		+ "*GEOM*TEXT SET " + session_tour.getData().get(0).getCourseName().toUpperCase() + ", " + session_tour.getData().get(0).getCourseVenue().toUpperCase()  + "\0");
 //		    
-		    
+		    String venueName = readVenueName();
+//		    print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
+//			 		+ "*GEOM*TEXT SET " + "ZION HILLS GOLF COUNTY, KOLAR, KARNATAKA"  + "\0");
 		    print_writer.println("-1 RENDERER*BACK_LAYER*TREE*$main$All$Front$Data$Top3$4$LeaderBoardData$Txt_FirstName"
-			 		+ "*GEOM*TEXT SET " + "ZION HILLS GOLF COUNTY, KOLAR, KARNATAKA"  + "\0");
+			 		+ "*GEOM*TEXT SET " + venueName  + "\0");
 		    print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Fullframes"
 				    + " C:/Temp/Preview.png Anim_Fullframe$In_Out 1.960 Anim_Fullframe$In_Out$In 1.960 Anim_Fullframe$In_Out$In$In 1.540 \0");
 		
 	}
 	
 	public void populatenamesuper(PrintWriter print_writer, GolfScoresResponse session_score, GolfTourResponse session_tour, 
-			GolfEntryListResponse session_entry_list, GolfCourseResponse session_course, GolfDrawsResponse session_draws, String val,String selectedbroadcaster) {
+			GolfEntryListResponse session_entry_list, GolfCourseResponse session_course, GolfDrawsResponse session_draws, String val , String type,String selectedbroadcaster) {
 		if (session_score == null) {
 			System.out.println("ERROR: Lt-Match -> Match is null");
 		} else {
@@ -1365,8 +1402,15 @@ public class PGTI extends Scene {
 			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT$Side1$Select"
 					+ "$LT_Super$Header$Header_Band$Logo_Header_Grp$Img_Logo*TEXTURE*IMAGE SET " + logo_path + "\0");
 			 
-			 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT$Side" + whichSide +
-				        "$LT_Super$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + "WINNER" + "\0");
+			if(type.equalsIgnoreCase("TName")) {
+				
+				 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT$Side" + whichSide +
+					        "$LT_Super$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + session_tour.getData().get(0).getTourName() + "\0");
+			}else {
+				 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT$Side" + whichSide +
+					        "$LT_Super$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + "WINNER" + "\0");
+			}
+			
 			 
 			 print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Overlays"
 					    + " C:/Temp/Preview.png Anim_Overlays$LT$In_Out 1.140 Anim_Overlays$LT$In_Out$Header 1.140 "
