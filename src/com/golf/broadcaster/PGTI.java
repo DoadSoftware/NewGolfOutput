@@ -1405,7 +1405,7 @@ public class PGTI extends Scene {
 			if(type.equalsIgnoreCase("TName")) {
 				
 				 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT$Side" + whichSide +
-					        "$LT_Super$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + session_tour.getData().get(0).getTourName() + "\0");
+					        "$LT_Super$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + session_tour.getData().get(0).getTourName().toUpperCase() + "\0");
 			}else {
 				 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT$Side" + whichSide +
 					        "$LT_Super$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + "WINNER" + "\0");
