@@ -238,6 +238,9 @@ function processUserSelection(whichInput)
 	case 'populate_lofextra_btn':
 		processGolfProcedures('POPULATE-LOFF-PLAYER_DETAILSLT_EXTRA');
 		break;
+	case 'populate_lofextra1_btn':
+		processGolfProcedures('POPULATE-PLAYER_DETAILSLT');
+		break;	
 	case 'populate_hole_details_btn':
 		processGolfProcedures('POPULATE-HOLE_DETAILS_LT');
 		break;
@@ -348,6 +351,9 @@ function processGolfProcedures(whatToProcess, whichInput)
 		break;
 		
 	case 'POPULATE-LOFF-PLAYER_DETAILSLT_EXTRA': 
+		value_to_process = $('#selectedExtraType').val();
+		break;
+	case 'POPULATE-PLAYER_DETAILSLT':
 		value_to_process = $('#selectedExtraType').val();
 		break;
 	case 'READ-MATCH-AND-POPULATE':
@@ -478,9 +484,12 @@ function processGolfProcedures(whatToProcess, whichInput)
 			
 			case "POPULATE-NAMESUPERR_FREETEXT": case "POPULATE-NAMESUPERR": case"POPULATE-TOPTEN-LEADERBOARD": case 'POPULATE-TOPFIVE-LEADERBOARD':
 			case 'POPULATE-FF_TOPTEN-LEADERBOARD': case 'POPULATE-FF_TOPTHREE-LEADERBOARD': case 'POPULATE-ROUND-PLAYER_DETAILSLT': case'POPULATE-HOLE_DETAILS': 
-			case 'POPULATE-LOFF-PLAYER_DETAILSLT': case 'POPULATE-FF-MATCHDRAWS':  case 'POPULATE-LOFF-PLAYER_DETAILSLT_EXTRA':
+			case 'POPULATE-LOFF-PLAYER_DETAILSLT': case 'POPULATE-FF-MATCHDRAWS':  case 'POPULATE-LOFF-PLAYER_DETAILSLT_EXTRA': case 'POPULATE-PLAYER_DETAILSLT':
 			if(confirm('Animate In?') == true){
 				switch(whatToProcess){
+				case 'POPULATE-PLAYER_DETAILSLT':
+					processGolfProcedures('ANIMATE-IN-PLAYER_DETAILSLT');
+					break;
 				case "POPULATE-NAMESUPERR_FREETEXT": 
 					processGolfProcedures('ANIMATE-IN-NAMESUPERR_FREETEXT');	
 					break;
@@ -607,7 +616,7 @@ function addItemsToList(whatToProcess, dataToProcess)
 		    var populateBtn = document.createElement("input");
 		    populateBtn.type = "button";
 		    populateBtn.value = "Populate";
-		    populateBtn.name = "populate_lofextra_btn";
+		    populateBtn.name = "populate_lofextra1_btn";
 		    populateBtn.setAttribute(
 		        "onclick",
 		        "processUserSelection(this)"

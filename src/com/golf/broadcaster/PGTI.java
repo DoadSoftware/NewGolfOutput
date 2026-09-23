@@ -69,7 +69,7 @@ public class PGTI extends Scene {
 			
 		case "POPULATE-HOLE_DETAILS_LT": case "POPULATE-LOFF-PLAYER_DETAILSLT":  case "POPULATE-LOFF-PLAYER_DETAILSLT_EXTRA":
 		case "POPULATE-LT-MATCHID": case "POPULATE-LOF-PLAYER_DETAILS": case "POPULATE-HOLE_DETAILS": case "POPULATE-COF-PLAYER_DETAILSLT":
-		 case "POPULATE-LT-PLAYER_DETAILS_COF":
+		 case "POPULATE-LT-PLAYER_DETAILS_COF": case "POPULATE-PLAYER_DETAILSLT":
 		 case "POPULATE-TLOGO":   case "POPULATE-CHANGETLOGO": case "POPULATE-EYE_OFF": case "POPULATE-EYE_ONN":
 		switch (whatToProcess.toUpperCase()) {
 			case "POPULATE-EYE_OFF":
@@ -127,7 +127,9 @@ public class PGTI extends Scene {
 			 * break;
 			 */
 			
-			
+			case "POPULATE-PLAYER_DETAILSLT":
+				populateplayerdetail(print_writer, valueToProcess.split(",")[0], session_selected_broadcaster);
+				break;
 			case "POPULATE-COF-PLAYER_DETAILSLT":
 				populatecofplayerdetail(print_writer, session_score, session_tour, session_entry_list, session_course, session_draws, valueToProcess.split(",")[0], session_selected_broadcaster);
 				break;
@@ -238,7 +240,7 @@ public class PGTI extends Scene {
 			
 		case "ANIMATE-IN-NAMESUPERR": case "ANIMATE-IN-NAMESUPERR_FREETEXT":case "ANIMATE-IN-TOP10_LEADREBOARD": case "ANIMATE-IN-TOP5_LEADREBOARD":
 		case "ANIMATE-IN-FF_TOPTEN-LEADERBOARD": case "ANIMATE-IN-FF_TOPTHREE-LEADERBOARD": case "ANIMATE-IN-ROUND-PLAYER_DETAILSLT":
-		case "ANIMATE-IN-FF-MATCHDRAWS":	
+		case "ANIMATE-IN-FF-MATCHDRAWS": case "ANIMATE-IN-PLAYER_DETAILSLT":
 			switch (whatToProcess.toUpperCase()) {
 			case "ANIMATE-IN-NAMESUPERR": 
 				AnimateInGraphics(print_writer, "NAMESUPERR");
@@ -274,7 +276,11 @@ public class PGTI extends Scene {
 				break;
 				
 				
-			//not doen	
+			//not doen
+			case "ANIMATE-IN-PLAYER_DETAILSLT":
+				AnimateInGraphics(print_writer, "PLAYER_DETAILSLT");
+				which_data_gfx = "PLAYER_DETAILSLT";
+				break;	
 			case "ANIMATE-IN-HOLE_DETAILS_LT":
 				AnimateInGraphics(print_writer, "HOLE_DETAILS_LT");
 				which_data_gfx = "HOLE_DETAILS_LT";
@@ -314,7 +320,7 @@ public class PGTI extends Scene {
 			break;
 		case "ANIMATE-OUT_ALL":
 			switch (which_graphics_onscreen.toUpperCase()) {
-			case "TOP10_LEADREBOARD": case "TOP5_LEADREBOARD": case "NAMESUPERR_FREETEXT": case "NAMESUPERR":
+			case "TOP10_LEADREBOARD": case "TOP5_LEADREBOARD": case "NAMESUPERR_FREETEXT": case "NAMESUPERR":	
 				print_writer.println("-1 RENDERER*FRONT_LAYER*STAGE*DIRECTOR*Anim_Overlays$LT$In_Out CONTINUE \0");
 				which_graphics_onscreen = "";
 				TimeUnit.MILLISECONDS.sleep(600);
@@ -336,7 +342,7 @@ public class PGTI extends Scene {
 			break;
 		case "ANIMATE-OUT_SMALLLT":
 			switch (which_data_gfx.toUpperCase()) {
-			case "COF-PLAYER_DETAILSLT": 
+			case "COF-PLAYER_DETAILSLT": case "PLAYER_DETAILSLT":
 				print_writer.println("-1 RENDERER*FRONT_LAYER*STAGE*DIRECTOR*Anim_Overlays$LT_Small$In_Out CONTINUE \0");
 				which_data_gfx = "";
 				TimeUnit.MILLISECONDS.sleep(600);
@@ -382,7 +388,7 @@ public class PGTI extends Scene {
 		case "TOP10_LEADREBOARD": case "TOP5_LEADREBOARD": case "NAMESUPERR": case "NAMESUPERR_FREETEXT":
 			print_writer.println("-1 RENDERER*FRONT_LAYER*STAGE*DIRECTOR*Anim_Overlays$LT$In_Out START \0");
 			break;
-		case "COF-PLAYER_DETAILSLT": case "LOFF-PLAYER_DETAILSLT":
+		case "COF-PLAYER_DETAILSLT": case "LOFF-PLAYER_DETAILSLT": case "PLAYER_DETAILSLT":
 			print_writer.println("-1 RENDERER*FRONT_LAYER*STAGE*DIRECTOR*Anim_Overlays$LT_Small$In_Out START \0");
 			break;
 		case "FF_TOPTEN-LEADERBOARD": case "FF_TOPTHREE-LEADERBOARD": case "FF-MATCHDRAWS":
@@ -1124,6 +1130,32 @@ public class PGTI extends Scene {
 //			    + " C:/Temp/Preview.png Anim_Overlays$LT_Small$In_Out 1.140 "
 //			    + "Anim_Overlays$LT_Small$In_Out$In 0.840 \0");
 //	}
+	
+	public void populateplayerdetail(PrintWriter print_writer,String val,String selectedbroadcaster) {
+
+		if(which_graphics_onscreen == "TOP5_LEADREBOARD") {
+			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Center*TRANSFORMATION*POSITION*X SET 0.0\0");
+			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Center*TRANSFORMATION*POSITION*Y SET -406.0\0");
+		}else {
+			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Center*TRANSFORMATION*POSITION*x SET 0.0\0");
+			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Center*TRANSFORMATION*POSITION*Y SET -620.0\0");
+		}
+		
+		print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$Select*FUNCTION*Omo*vis_con SET 0\0");
+		
+		print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$Select"
+				+ "$LT_Center$Header$Logo_Header_Grp$Img_Logo*TEXTURE*IMAGE SET " + logo_path + "\0");
+
+        print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+                + whichSide + "$LT_Center$Header$Logo_Header_Grp$Txt_Header01" + "*GEOM*TEXT SET LAST SHOT \0");
+        
+        print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+                + whichSide + "$LT_Center$Header$Txt_Header02" + "*GEOM*TEXT SET " + val + " YDS\0");
+
+        print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Overlays"
+			    + " C:/Temp/Preview.png Anim_Overlays$LT_Small$In_Out 1.140 "
+			    + "Anim_Overlays$LT_Small$In_Out$In 0.840 \0");
+	}
 	
 	public void populateloffplayerdetail(PrintWriter print_writer,
 	        GolfScoresResponse session_score,
