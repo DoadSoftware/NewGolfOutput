@@ -115,6 +115,9 @@ function processUserSelectionData(whatToProcess,dataToProcess){
 			case '9':
 				addItemsToList('POPULATE-LOF-LOFEXTRA');
 				break;	
+			case '8':
+				addItemsToList('POPULATE-LOF-LOFEXTRA1');
+				break;		
 			case 'z':
 				processGolfProcedures('ANIMATE_IN-HOLE_IN_ONE');
 				break;
@@ -552,6 +555,82 @@ function addItemsToList(whatToProcess, dataToProcess)
 	var cellCount=0;
 	switch (whatToProcess) {
 		
+		case 'POPULATE-LOF-LOFEXTRA1':
+
+		    $("#match_body_div").hide();
+		    $("#select_graphic_options_div").show();
+
+		    var div = document.getElementById('select_graphic_options_div');
+		    div.innerHTML = "";
+
+		    var h = document.createElement("h3");
+		    h.innerHTML = "LOF EXTRA";
+		    h.style.textAlign = "center";
+		    div.appendChild(h);
+
+		    // Hidden value
+		    var hiddenType = document.createElement("input");
+		    hiddenType.type = "hidden";
+		    hiddenType.id = "selectedExtraType";
+		    div.appendChild(hiddenType);
+
+		    var table = document.createElement("table");
+		    table.className = "table table-bordered";
+
+		    var tbody = document.createElement("tbody");
+		    table.appendChild(tbody);
+		    div.appendChild(table);
+
+		    // Type row
+		    var row = tbody.insertRow();
+
+		    row.insertCell(0).innerHTML = "Type";
+
+		    // Text box
+		    var typeInput = document.createElement("input");
+		    typeInput.type = "text";
+		    typeInput.id = "extraTypeInput";
+		    typeInput.name = "extraTypeInput";
+		    typeInput.placeholder = "Enter Type";
+		    typeInput.className = "form-control";
+
+		    // Store typed value in hidden field
+		    typeInput.oninput = function () {
+		        document.getElementById("selectedExtraType").value = this.value;
+		    };
+
+		    row.insertCell(1).appendChild(typeInput);
+
+		    // Buttons row
+		    row = tbody.insertRow();
+
+		    var populateBtn = document.createElement("input");
+		    populateBtn.type = "button";
+		    populateBtn.value = "Populate";
+		    populateBtn.name = "populate_lofextra_btn";
+		    populateBtn.setAttribute(
+		        "onclick",
+		        "processUserSelection(this)"
+		    );
+
+		    var cancelBtn = document.createElement("input");
+		    cancelBtn.type = "button";
+		    cancelBtn.value = "Cancel";
+		    cancelBtn.name = "cancel_graphics_btn";
+		    cancelBtn.setAttribute(
+		        "onclick",
+		        "processUserSelection(this)"
+		    );
+
+		    var d = document.createElement("div");
+		    d.appendChild(populateBtn);
+		    d.appendChild(cancelBtn);
+
+		    var c = row.insertCell(0);
+		    c.colSpan = 2;
+		    c.appendChild(d);
+
+		    break;
 		
 		case 'POPULATE-LOF-LOFEXTRA':
 			$("#match_body_div").hide();
@@ -1080,231 +1159,339 @@ function addItemsToList(whatToProcess, dataToProcess)
    
 	case 'POPULATE-LOF-PLAYER_DETAILS-OPTIONS':
 
-$("#match_body_div").hide();
-$("#select_graphic_options_div").show();
+	    $("#match_body_div").hide();
 
-var div = document.getElementById('select_graphic_options_div');
-div.innerHTML = "";
+	    $("#select_graphic_options_div").show();
 
-var selectedHole = "";
+	    var div = document.getElementById('select_graphic_options_div');
 
+	    div.innerHTML = "";
 
-/* ---------- HEADER ---------- */
+	    var selectedHole = "";
 
-var h = document.createElement("h3");
-h.innerHTML = "LOF PLAYER DETAILS";
-h.style.textAlign = "center";
-div.appendChild(h);
 
+	    /* ---------- HEADER ---------- */
 
-/* ---------- PREVIEW ---------- */
+	    var h = document.createElement("h3");
 
-var preview = document.createElement("div");
-preview.id = "previewBox";
-preview.style.border = "2px solid black";
-preview.style.padding = "10px";
-preview.style.margin = "10px";
-preview.innerHTML = "Preview";
+	    h.innerHTML = "LOF PLAYER DETAILS";
 
-div.appendChild(preview);
+	    h.style.textAlign = "center";
 
+	    div.appendChild(h);
 
-/* ---------- HIDDEN VALUES ---------- */
 
-var hiddenPlayer = document.createElement("input");
-hiddenPlayer.type = "hidden";
-hiddenPlayer.id = "selectedPlayerCode";
-div.appendChild(hiddenPlayer);
+	    /* ---------- PREVIEW ---------- */
 
-var hiddenHole = document.createElement("input");
-hiddenHole.type = "hidden";
-hiddenHole.id = "selectedHole";
-div.appendChild(hiddenHole);
+	    var preview = document.createElement("div");
 
+	    preview.id = "previewBox";
 
-/* ---------- TABLE ---------- */
+	    preview.style.border = "2px solid black";
 
-var table = document.createElement("table");
-table.className = "table table-bordered";
+	    preview.style.padding = "10px";
 
-var tbody = document.createElement("tbody");
-table.appendChild(tbody);
+	    preview.style.margin = "10px";
 
-div.appendChild(table);
+	    preview.innerHTML = "Preview";
 
+	    div.appendChild(preview);
 
-/* ================= PLAYER ================= */
 
-var row = tbody.insertRow();
+	    /* ---------- HIDDEN VALUES ---------- */
 
-row.insertCell(0).innerHTML = "Player";
+	    var hiddenPlayer = document.createElement("input");
 
-var playerDiv = document.createElement("div");
+	    hiddenPlayer.type = "hidden";
 
+	    hiddenPlayer.id = "selectedPlayerCode";
 
-var searchBox = document.createElement("input");
-searchBox.type = "text";
-searchBox.placeholder = "Search player...";
-searchBox.style.width = "300px";
-searchBox.style.marginBottom = "5px";
+	    div.appendChild(hiddenPlayer);
 
-playerDiv.appendChild(searchBox);
 
+	    var hiddenHole = document.createElement("input");
 
-var select = document.createElement("select");
-select.id = "selectCOFPlayer";
-select.style.width = "300px";
-select.size = 6;
+	    hiddenHole.type = "hidden";
 
-playerDiv.appendChild(select);
+	    hiddenHole.id = "selectedHole";
 
-row.insertCell(1).appendChild(playerDiv);
+	    div.appendChild(hiddenHole);
 
 
-var players = dataToProcess.players || [];
+	    /* ---------- TABLE ---------- */
 
-players.sort(function(a,b){
-    return a.name.localeCompare(b.name);
-});
+	    var table = document.createElement("table");
 
+	    table.className = "table table-bordered";
 
-function fillPlayers(list){
+	    var tbody = document.createElement("tbody");
 
-    select.innerHTML = "";
+	    table.appendChild(tbody);
 
-    for (var i=0;i<list.length;i++){
+	    div.appendChild(table);
 
-        var op = document.createElement("option");
-        op.value = list[i].code;
-        op.text = list[i].name;
 
-        select.appendChild(op);
-    }
-}
+	    /* ================= PLAYER ================= */
 
-fillPlayers(players);
+	    var row = tbody.insertRow();
 
+	    row.insertCell(0).innerHTML = "Player";
 
-searchBox.onkeyup = function(){
+	    var playerDiv = document.createElement("div");
 
-    var txt = this.value.toLowerCase();
 
-    var filtered = [];
+	    var searchBox = document.createElement("input");
 
-    for (var i=0;i<players.length;i++){
+	    searchBox.type = "text";
 
-        var name = players[i].name.toLowerCase();
+	    searchBox.placeholder = "Search player...";
 
-        if(name.indexOf(txt) !== -1){
-            filtered.push(players[i]);
-        }
-    }
+	    searchBox.style.width = "300px";
 
-    fillPlayers(filtered);
-};
+	    searchBox.style.marginBottom = "5px";
 
+	    playerDiv.appendChild(searchBox);
 
-select.onchange = function(){
 
-    var sel = document.getElementById("selectCOFPlayer");
+	    var select = document.createElement("select");
 
-    if(sel.selectedIndex>=0){
+	    select.id = "selectCOFPlayer";
 
-        document.getElementById("selectedPlayerCode").value =
-            sel.value;
-    }
+	    select.style.width = "300px";
 
-    updatePreview();
-};
+	    select.size = 6;
 
+	    playerDiv.appendChild(select);
 
-/* ================= HOLE ================= */
+	    row.insertCell(1).appendChild(playerDiv);
 
-row = tbody.insertRow();
 
-row.insertCell(0).innerHTML = "Hole";
+	    var players = dataToProcess.players || [];
 
-var holeDiv = document.createElement("div");
+	    players.sort(function(a,b){
 
-for (var h1=1; h1<=18; h1++){
+	        return a.name.localeCompare(b.name);
 
-    var btn = document.createElement("button");
+	    });
 
-    btn.type = "button";
-    btn.innerHTML = h1;
-    btn.style.margin = "2px";
 
-    btn.onclick = function(){
+	    function fillPlayers(list){
 
-        selectedHole = this.innerHTML;
+	        select.innerHTML = "";
 
-        document.getElementById("selectedHole").value =
-            selectedHole;
+	        for (var i=0;i<list.length;i++){
 
-        var b = holeDiv.getElementsByTagName("button");
+	            var op = document.createElement("option");
 
-        for(var k=0;k<b.length;k++){
-            b[k].style.background="";
-        }
+	            op.value = list[i].code;
 
-        this.style.background="yellow";
+	            op.text = list[i].name;
 
-        updatePreview();
-    };
+	            select.appendChild(op);
 
-    holeDiv.appendChild(btn);
-}
+	        }
 
-row.insertCell(1).appendChild(holeDiv);
+	    }
 
+	    fillPlayers(players);
 
-/* ================= PREVIEW ================= */
 
-function updatePreview(){
+	    searchBox.onkeyup = function(){
 
-    var player = "";
+	        var txt = this.value.toLowerCase();
 
-    var sel = document.getElementById("selectCOFPlayer");
+	        var filtered = [];
 
-    if(sel.selectedIndex>=0){
-        player = sel.options[sel.selectedIndex].text;
-    }
+	        for (var i=0;i<players.length;i++){
 
-    preview.innerHTML =
-        "Player : "+player+
-        " | Hole : "+selectedHole;
-}
+	            var name = players[i].name.toLowerCase();
 
+	            if(name.indexOf(txt) !== -1){
 
-/* ================= BUTTONS ================= */
+	                filtered.push(players[i]);
 
-row = tbody.insertRow();
+	            }
 
-var populateBtn = document.createElement("input");
-populateBtn.type="button";
-populateBtn.value="Populate";
-populateBtn.name="populate_lofff_player_btn";
-populateBtn.setAttribute(
-"onclick",
-"processUserSelection(this)"
-);
+	        }
 
-var cancelBtn = document.createElement('input');
-cancelBtn.type = 'button';
-cancelBtn.name = 'cancel_graphics_btn';
-cancelBtn.value = 'Cancel';
-cancelBtn.setAttribute('onclick','processUserSelection(this)');
+	        fillPlayers(filtered);
 
-var d = document.createElement("div");
+	    };
 
-d.appendChild(populateBtn);
-d.appendChild(cancelBtn);
 
-var c = row.insertCell(0);
-c.colSpan=2;
-c.appendChild(d);
+	    select.onchange = function(){
 
-break;
+	        var sel = document.getElementById("selectCOFPlayer");
+
+	        if(sel.selectedIndex>=0){
+
+	            document.getElementById("selectedPlayerCode").value =
+	                sel.value;
+
+	        }
+
+	        updatePreview();
+
+	    };
+
+
+	    /* ================= HOLE ================= */
+
+	    row = tbody.insertRow();
+
+	    row.insertCell(0).innerHTML = "Hole";
+
+	    var holeDiv = document.createElement("div");
+
+
+	    for (var h1=1; h1<=18; h1++){
+
+	        var btn = document.createElement("button");
+
+	        btn.type = "button";
+
+	        btn.innerHTML = h1;
+
+	        btn.style.margin = "2px";
+
+	        btn.onclick = function(){
+
+	            selectedHole = this.innerHTML;
+
+	            document.getElementById("selectedHole").value =
+	                selectedHole;
+
+	            var b = holeDiv.getElementsByTagName("button");
+
+	            for(var k=0;k<b.length;k++){
+
+	                b[k].style.background="";
+
+	            }
+
+	            this.style.background="yellow";
+
+	            updatePreview();
+
+	        };
+
+	        holeDiv.appendChild(btn);
+
+	    }
+
+
+	    /* ---------- LAST SHOT ---------- */
+
+	    var lastShotBtn = document.createElement("button");
+
+	    lastShotBtn.type = "button";
+
+	    lastShotBtn.innerHTML = "LAST SHOT";
+
+	    lastShotBtn.style.margin = "2px";
+
+	    lastShotBtn.onclick = function(){
+
+	        selectedHole = this.innerHTML;
+
+	        document.getElementById("selectedHole").value =
+	            selectedHole;
+
+	        var b = holeDiv.getElementsByTagName("button");
+
+	        for(var k=0;k<b.length;k++){
+
+	            b[k].style.background="";
+
+	        }
+
+	        this.style.background="yellow";
+
+	        updatePreview();
+
+	    };
+
+	    holeDiv.appendChild(lastShotBtn);
+
+
+	    row.insertCell(1).appendChild(holeDiv);
+
+
+	    /* ================= PREVIEW ================= */
+
+	    function updatePreview(){
+
+	        var player = "";
+
+	        var sel = document.getElementById("selectCOFPlayer");
+
+	        if(sel.selectedIndex>=0){
+
+	            player = sel.options[sel.selectedIndex].text;
+
+	        }
+
+	        preview.innerHTML =
+
+	            "Player : "+player+
+
+	            " | Hole : "+selectedHole;
+
+	    }
+
+
+	    /* ================= BUTTONS ================= */
+
+	    row = tbody.insertRow();
+
+	    var populateBtn = document.createElement("input");
+
+	    populateBtn.type="button";
+
+	    populateBtn.value="Populate";
+
+	    populateBtn.name="populate_lofff_player_btn";
+
+	    populateBtn.setAttribute(
+
+	        "onclick",
+
+	        "processUserSelection(this)"
+
+	    );
+
+
+	    var cancelBtn = document.createElement('input');
+
+	    cancelBtn.type = 'button';
+
+	    cancelBtn.name = 'cancel_graphics_btn';
+
+	    cancelBtn.value = 'Cancel';
+
+	    cancelBtn.setAttribute(
+
+	        'onclick',
+
+	        'processUserSelection(this)'
+
+	    );
+
+
+	    var d = document.createElement("div");
+
+	    d.appendChild(populateBtn);
+
+	    d.appendChild(cancelBtn);
+
+
+	    var c = row.insertCell(0);
+
+	    c.colSpan=2;
+
+	    c.appendChild(d);
+
+	    break;
 
 	case 'POPULATE-NAMESUPER-FREETEXT':
 		$("#match_body_div").hide();

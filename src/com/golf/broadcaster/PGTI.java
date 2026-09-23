@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import jakarta.xml.bind.JAXBException;
 import com.golf.containers.Scene;
@@ -1033,84 +1036,274 @@ public class PGTI extends Scene {
 	}
 	
 	
-	public void populateloffplayerdetail(PrintWriter print_writer, GolfScoresResponse session_score, GolfTourResponse session_tour, 
-			GolfEntryListResponse session_entry_list, GolfCourseResponse session_course, GolfDrawsResponse session_draws,String val,String selectedbroadcaster) {
-		
-		
-		
-		System.out.println("valut to process" + val);
-		if (session_score == null) {
-			System.out.println("ERROR: Lt-Match -> Match is null");
-		} else {
-			
-			/*
-			 * if(which_graphics_onscreen != null) { CricketFunctions.
-			 * DoadWriteCommandToAllViz("-1 RENDERER*TREE*$Main$All$Geom_GroundAll$RotationGrp$Players$PlayerAll"
-			 * + (i + 1) + "*TRANSFORMATION" + "*POSITION*X SET " + ScaleX + "\0",
-			 * print_writers); CricketFunctions.
-			 * DoadWriteCommandToAllViz("-1 RENDERER*TREE*$Main$All$Geom_GroundAll$RotationGrp$Players$PlayerAll"
-			 * + (i + 1) + "*TRANSFORMATION" + "*POSITION*Z SET " + ScaleY + "\0",
-			 * print_writers);
-			 * 
-			 * 
-			 * print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" +
-			 * whichSide +
-			 * "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Header01*GEOM*TEXT SET " +
-			 * session_score.getData().get(i).getMemName() + "\0"); }
-			 */			
-			
-			if(which_graphics_onscreen == "TOP5_LEADREBOARD") {
-				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*X SET -621.0\0");
-				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*Y SET -379.0\0");
-			}else {
-				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*x SET -574.0\0");
-				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*Y SET -620.0\0");
-			}
-			
-			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$Select*FUNCTION*Omo*vis_con SET 1\0");
-			for(int i=0;i<session_score.getData().size(); i++) {
-				if(session_score.getData().get(i).getMemCode().equalsIgnoreCase(val.split(",")[0])) {
-					
-					 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
-						        "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Header01*GEOM*TEXT SET " + session_score.getData().get(i).getMemName() + "\0");
-					 
-					 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
-						        "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Number*GEOM*TEXT SET " + Integer.valueOf(val.split(",")[1]) + "\0");
-					 
-					 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
-						        "$LT_Left$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + (session_score.getData().get(i).getScore() == null ?"-":
-							 		0 == Integer.parseInt(session_score.getData().get(i).getScore()) ? "PAR" : session_score.getData().get(i).getScore()) + "\0");
-					 
-					 
-					 
-						/*
-						 * print_writer.println( "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
-						 * + whichSide +
-						 * "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info02*GEOM*TEXT SET " +
-						 * (!val.split(",")[1].equalsIgnoreCase("EMPTY") ?
-						 * val.split(",")[1].toUpperCase() : "") + "\0");
-						 */
-				}
-				for (int j = 0; j < session_course.getData().size(); j++) {
-					 List<String> pars = session_course.getData().get(j).getAllPars();
-					 System.out.println(val);
-					 System.out.println(pars.size());
-					 for(int h=1;h<pars.size() +1;h++) {
-						 if (Integer.valueOf((val.split(",")[1])) == h) {
-							 String pValue = pars.get(h-1);
-							
-							 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
-								        "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info01*GEOM*TEXT SET " + "PAR "+ pValue + "\0"); 
-						 }
-					 }
-				}
-			}		
+//	public void populateloffplayerdetail(PrintWriter print_writer, GolfScoresResponse session_score, GolfTourResponse session_tour, 
+//			GolfEntryListResponse session_entry_list, GolfCourseResponse session_course, GolfDrawsResponse session_draws,String val,String selectedbroadcaster) {
+//		
+//		
+//		
+//		System.out.println("valut to process" + val);
+//		if (session_score == null) {
+//			System.out.println("ERROR: Lt-Match -> Match is null");
+//		} else {
+//			
+//			/*
+//			 * if(which_graphics_onscreen != null) { CricketFunctions.
+//			 * DoadWriteCommandToAllViz("-1 RENDERER*TREE*$Main$All$Geom_GroundAll$RotationGrp$Players$PlayerAll"
+//			 * + (i + 1) + "*TRANSFORMATION" + "*POSITION*X SET " + ScaleX + "\0",
+//			 * print_writers); CricketFunctions.
+//			 * DoadWriteCommandToAllViz("-1 RENDERER*TREE*$Main$All$Geom_GroundAll$RotationGrp$Players$PlayerAll"
+//			 * + (i + 1) + "*TRANSFORMATION" + "*POSITION*Z SET " + ScaleY + "\0",
+//			 * print_writers);
+//			 * 
+//			 * 
+//			 * print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" +
+//			 * whichSide +
+//			 * "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Header01*GEOM*TEXT SET " +
+//			 * session_score.getData().get(i).getMemName() + "\0"); }
+//			 */			
+//			
+//			if(which_graphics_onscreen == "TOP5_LEADREBOARD") {
+//				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*X SET -621.0\0");
+//				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*Y SET -379.0\0");
+//			}else {
+//				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*x SET -574.0\0");
+//				print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$LT_Left*TRANSFORMATION*POSITION*Y SET -620.0\0");
+//			}
+//			
+//			print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide + "$Select*FUNCTION*Omo*vis_con SET 1\0");
+//			for(int i=0;i<session_score.getData().size(); i++) {
+//				if(session_score.getData().get(i).getMemCode().equalsIgnoreCase(val.split(",")[0])) {
+//					
+//					 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
+//						        "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Header01*GEOM*TEXT SET " + session_score.getData().get(i).getMemName() + "\0");
+//					 
+//					 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
+//						        "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Number*GEOM*TEXT SET " + Integer.valueOf(val.split(",")[1]) + "\0");
+//					 
+//					 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
+//						        "$LT_Left$Header$Header_Band$Txt_Header02*GEOM*TEXT SET " + (session_score.getData().get(i).getScore() == null ?"-":
+//							 		0 == Integer.parseInt(session_score.getData().get(i).getScore()) ? "PAR" : session_score.getData().get(i).getScore()) + "\0");
+//					 
+//					 
+//					 
+//						/*
+//						 * print_writer.println( "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+//						 * + whichSide +
+//						 * "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info02*GEOM*TEXT SET " +
+//						 * (!val.split(",")[1].equalsIgnoreCase("EMPTY") ?
+//						 * val.split(",")[1].toUpperCase() : "") + "\0");
+//						 */
+//				}
+//				String value = val.split(",")[1];
+//
+//				Object result;
+//
+//				if (value.contains("LAST")) {
+//					print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
+//					        "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info01*GEOM*TEXT SET " + "LAST SHOT " + "\0"); 
+//				} else {
+//					for (int j = 0; j < session_course.getData().size(); j++) {
+//						 List<String> pars = session_course.getData().get(j).getAllPars();
+//						 System.out.println(val);
+//						 System.out.println(pars.size());
+//						 for(int h=1;h<pars.size() +1;h++) {
+//							 if (Integer.valueOf((val.split(",")[1])) == h) {
+//								 String pValue = pars.get(h-1);
+//								
+//								 print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
+//									        "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info01*GEOM*TEXT SET " + "PAR "+ pValue + "\0"); 
+//							 }
+//						 }
+//					}
+//				}
+//				
+//			}		
+//	}
+//		
+//		print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Overlays"
+//			    + " C:/Temp/Preview.png Anim_Overlays$LT_Small$In_Out 1.140 "
+//			    + "Anim_Overlays$LT_Small$In_Out$In 0.840 \0");
+//	}
+	
+	public void populateloffplayerdetail(PrintWriter print_writer,
+	        GolfScoresResponse session_score,
+	        GolfTourResponse session_tour,
+	        GolfEntryListResponse session_entry_list,
+	        GolfCourseResponse session_course,
+	        GolfDrawsResponse session_draws,
+	        String val,
+	        String selectedbroadcaster) {
+
+	    System.out.println("valut to process" + val);
+
+	    if (session_score == null) {
+
+	        System.out.println("ERROR: Lt-Match -> Match is null");
+
+	    } else {
+
+	        /*
+	         * if(which_graphics_onscreen != null) { CricketFunctions.
+	         * DoadWriteCommandToAllViz("-1 RENDERER*TREE*$Main$All$Geom_GroundAll$RotationGrp$Players$PlayerAll"
+	         * + (i + 1) + "*TRANSFORMATION" + "*POSITION*X SET " + ScaleX + "\0",
+	         * print_writers); CricketFunctions.
+	         * DoadWriteCommandToAllViz("-1 RENDERER*TREE*$Main$All$Geom_GroundAll$RotationGrp$Players$PlayerAll"
+	         * + (i + 1) + "*TRANSFORMATION" + "*POSITION*Z SET " + ScaleY + "\0",
+	         * print_writers);
+	         *
+	         *
+	         * print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" +
+	         * whichSide +
+	         * "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Header01*GEOM*TEXT SET " +
+	         * session_score.getData().get(i).getMemName() + "\0"); }
+	         */
+
+
+	        if (which_graphics_onscreen == "TOP5_LEADREBOARD") {
+
+	            print_writer.println(
+	                    "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                    + whichSide
+	                    + "$LT_Left*TRANSFORMATION*POSITION*X SET -621.0\0");
+
+	            print_writer.println(
+	                    "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                    + whichSide
+	                    + "$LT_Left*TRANSFORMATION*POSITION*Y SET -379.0\0");
+
+	        } else {
+
+	            print_writer.println(
+	                    "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                    + whichSide
+	                    + "$LT_Left*TRANSFORMATION*POSITION*x SET -574.0\0");
+
+	            print_writer.println(
+	                    "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                    + whichSide
+	                    + "$LT_Left*TRANSFORMATION*POSITION*Y SET -620.0\0");
+	        }
+
+
+	        print_writer.println(
+	                "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                + whichSide
+	                + "$Select*FUNCTION*Omo*vis_con SET 1\0");
+
+
+	        for (int i = 0; i < session_score.getData().size(); i++) {
+
+	            if (session_score.getData().get(i).getMemCode()
+	                    .equalsIgnoreCase(val.split(",")[0])) {
+
+
+	                print_writer.println(
+	                        "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                        + whichSide
+	                        + "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Header01"
+	                        + "*GEOM*TEXT SET "
+	                        + session_score.getData().get(i).getMemName()
+	                        + "\0");
+
+
+	                /*
+	                 * Keep your existing hole number.
+	                 *
+	                 * NOTE:
+	                 * If LAST SHOT is passed as val.split(",")[1],
+	                 * Integer.valueOf() cannot convert it.
+	                 *
+	                 * So only protect this part from LAST SHOT.
+	                 */
+
+	                String value = val.split(",")[1];
+
+	                if (!value.toUpperCase().contains("LAST")) {
+
+	                    print_writer.println(
+	                            "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                            + whichSide
+	                            + "$LT_Left$Header$Header_Band$Logo_Header_Grp$Txt_Number"
+	                            + "*GEOM*TEXT SET "
+	                            + Integer.valueOf(value)
+	                            + "\0");
+	                }
+
+
+	                print_writer.println(
+	                        "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                        + whichSide
+	                        + "$LT_Left$Header$Header_Band$Txt_Header02"
+	                        + "*GEOM*TEXT SET "
+	                        + (session_score.getData().get(i).getScore() == null
+	                                ? "-"
+	                                : 0 == Integer.parseInt(
+	                                        session_score.getData().get(i).getScore())
+	                                        ? "PAR"
+	                                        : session_score.getData().get(i).getScore())
+	                        + "\0");
+
+
+	                /*
+	                 * ==========================================
+	                 * LOWER INFO
+	                 * ==========================================
+	                 *
+	                 * Only this part changes for LAST SHOT.
+	                 */
+
+	                if (value.toUpperCase().contains("LAST")) {
+
+	                    print_writer.println(
+	                            "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                            + whichSide
+	                            + "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info01"
+	                            + "*GEOM*TEXT SET LAST SHOT \0");
+
+	                } else {
+
+	                    for (int j = 0;
+	                            j < session_course.getData().size();
+	                            j++) {
+
+	                        List<String> pars =
+	                                session_course.getData().get(j).getAllPars();
+
+	                        System.out.println(val);
+
+	                        System.out.println(pars.size());
+
+
+	                        for (int h = 1;
+	                                h < pars.size() + 1;
+	                                h++) {
+
+	                            if (Integer.valueOf(value) == h) {
+
+	                                String pValue = pars.get(h - 1);
+
+	                                print_writer.println(
+	                                        "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
+	                                        + whichSide
+	                                        + "$LT_Left$Header$LowerInfo_grp$LowerInfo$Txt_Info01"
+	                                        + "*GEOM*TEXT SET "
+	                                        + "PAR " + pValue
+	                                        + "\0");
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    }
+
+	    print_writer.println(
+	            "-1 RENDERER PREVIEW SCENE*"
+	            + "/Default/Overlays"
+	            + " C:/Temp/Preview.png Anim_Overlays$LT_Small$In_Out 1.140 "
+	            + "Anim_Overlays$LT_Small$In_Out$In 0.840 \0");
 	}
-		
-		print_writer.println("-1 RENDERER PREVIEW SCENE*" + "/Default/Overlays"
-			    + " C:/Temp/Preview.png Anim_Overlays$LT_Small$In_Out 1.140 "
-			    + "Anim_Overlays$LT_Small$In_Out$In 0.840 \0");
-	}
+
 	public void populateloffplayerextrapart(PrintWriter print_writer, GolfScoresResponse session_score, GolfTourResponse session_tour, 
 			GolfEntryListResponse session_entry_list, GolfCourseResponse session_course, GolfDrawsResponse session_draws,String val,String selectedbroadcaster) {
 		
@@ -1135,8 +1328,21 @@ public class PGTI extends Scene {
 				
 			}else {
 				String part = val.split(",")[0].trim();
+				
+				Set<String> validOptions = new HashSet<>(Arrays.asList(
+					     "ALBATROSS", "BIRDIE PUTT", "PAR PUTT", "BOGEY PUTT",
+					    "HOLE IN ONE", "EAGLE PUTT", "1ST SHOT", "2ND SHOT", "3RD SHOT",
+					    "4TH SHOT", "5TH SHOT", "6TH SHOT", "7TH SHOT"
+					));
 
-				String result = part;
+				String result = "";
+				
+				if (validOptions.contains(part.toUpperCase())) {
+				    result = part;
+				} else {
+				    result = part+ " YARDS";
+				}
+
 
 				print_writer.println(
 				    "-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side" + whichSide +
