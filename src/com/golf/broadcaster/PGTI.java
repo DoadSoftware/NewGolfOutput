@@ -1147,7 +1147,7 @@ public class PGTI extends Scene {
 				+ "$LT_Center$Header$Logo_Header_Grp$Img_Logo*TEXTURE*IMAGE SET " + logo_path + "\0");
 
         print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
-                + whichSide + "$LT_Center$Header$Logo_Header_Grp$Txt_Header01" + "*GEOM*TEXT SET LAST SHOT \0");
+                + whichSide + "$LT_Center$Header$Logo_Header_Grp$Txt_Header01" + "*GEOM*TEXT SET TO THE PIN\0");
         
         print_writer.println("-1 RENDERER*FRONT_LAYER*TREE*$Overlays$LT_Small$Side"
                 + whichSide + "$LT_Center$Header$Txt_Header02" + "*GEOM*TEXT SET " + val + " YDS\0");
